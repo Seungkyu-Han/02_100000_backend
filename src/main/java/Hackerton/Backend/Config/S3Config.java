@@ -1,4 +1,4 @@
-package Hackerton.Backend.config;
+package Hackerton.Backend.Config;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
