@@ -56,7 +56,7 @@ public class AuthServiceImpl implements AuthService {
         User user = userRepository.findById(Integer.valueOf(authentication.getName()));
 
         if(user == null)
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 
         user.setRefreshToken(null);
 
