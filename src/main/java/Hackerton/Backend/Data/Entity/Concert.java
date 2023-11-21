@@ -25,15 +25,12 @@ public class Concert {
 
     private Integer fundingPrice;
 
-    private String imgUrl;
-
     @Builder
-    public Concert(Date fundingDate, Date concertDate, RegionEnum region, Integer fundingPrice, String imgUrl){
+    public Concert(Date fundingDate, Date concertDate, RegionEnum region, Integer fundingPrice){
         this.fundingDate = fundingDate;
         this.concertDate = concertDate;
         this.region = region;
         this.fundingPrice = fundingPrice;
-        this.imgUrl = imgUrl;
     }
 }
 
