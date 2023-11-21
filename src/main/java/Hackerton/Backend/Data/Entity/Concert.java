@@ -25,6 +25,12 @@ public class Concert {
 
     private Integer fundingPrice;
 
+    //위도
+    private Float latitude;
+
+    //경도
+    private Float longitude;
+
     @Builder
     public Concert(Date fundingDate, Date concertDate, RegionEnum region, Integer fundingPrice){
         this.fundingDate = fundingDate;
