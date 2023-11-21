@@ -75,7 +75,12 @@ public class UserRepositoryImpl extends QuerydslRepositorySupport implements Use
                 preparedStatement.setNull(1, Types.VARCHAR);
             }
             preparedStatement.setString(2, user.getName());
-            preparedStatement.setString(3, user.getRefreshToken());
+            if(user.getRefreshToken() != null){
+                preparedStatement.setString(3, user.getRefreshToken());
+            }
+            else{
+                preparedStatement.setNull(3, Types.VARCHAR);
+            }
             preparedStatement.setString(4, user.getRole().toString());
             preparedStatement.setInt(5, user.getId());
 
