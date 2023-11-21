@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -36,6 +37,32 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public ResponseEntity<AuthGetLoginRes> login(String code) throws IOException {
         return getKakaoUserIdByKakaoAccessToken(getKakaoAccessToken(code));
+    }
+
+    @Override
+    public ResponseEntity<AuthGetLoginRes> login(Authentication authentication) {
+        User user = userRepository.findById(Integer.valueOf(authentication.getName()));
+
+        if(user == null)
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+
+        String accessToken = jwtTokenProvider.createAccessToken(user.getId());
+        return new ResponseEntity<>(new AuthGetLoginRes(accessToken, user.getRefreshToken()), HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<HttpStatus> logout(Authentication authentication){
+
+        User user = userRepository.findById(Integer.valueOf(authentication.getName()));
+
+        if(user == null)
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+
+        user.setRefreshToken(null);
+
+        userRepository.update(user);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     private ResponseEntity<AuthGetLoginRes> getKakaoUserIdByKakaoAccessToken(String kakaoAccessToken) throws IOException {
