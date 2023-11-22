@@ -1,6 +1,7 @@
 package Hackerton.Backend.Service.Impl;
 
-import Hackerton.Backend.Data.Dto.ConcertReview.Req.ConcertReviewReqDto;
+import Hackerton.Backend.Data.Dto.ConcertReview.Req.ConcertReviewCreateReqDto;
+import Hackerton.Backend.Data.Dto.ConcertReview.Req.ConcertReviewUpdateReqDto;
 import Hackerton.Backend.Data.Dto.ConcertReview.Res.ConcertReviewResDto;
 import Hackerton.Backend.Data.Entity.Concert;
 import Hackerton.Backend.Data.Entity.ConcertReview;
@@ -15,9 +16,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.AbstractDocument;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -28,8 +29,9 @@ public class ConcertReviewServiceImpl implements ConcertReviewService {
     private final UserRepository userRepository;
 
     @Override
-    public ResponseEntity<List<ConcertReviewResDto>> getConcertReview(Long id) {
-        List<ConcertReview> concertReviews = concertReviewRepository.findAllById(id);
+    public ResponseEntity<List<ConcertReviewResDto>> getConcertReview(Long concertId) {
+        Concert concert = concertRepository.findById(concertId);
+        List<ConcertReview> concertReviews = concertReviewRepository.findAllByConcert(concert);
 
         List<ConcertReviewResDto> dtos = new ArrayList<>();
         for (ConcertReview review : concertReviews) {
@@ -39,19 +41,56 @@ public class ConcertReviewServiceImpl implements ConcertReviewService {
 
         return new ResponseEntity<>(dtos, HttpStatus.OK);
     }
-    public ResponseEntity<HttpStatus> addConcertReview(ConcertReviewReqDto dto, Authentication authentication){
-        Concert concert=concertRepository.findById(dto.getConcertId());
-        if(concert==null){
+
+    public ResponseEntity<HttpStatus> createConcertReview(ConcertReviewCreateReqDto dto, Authentication authentication) {
+        Concert concert = concertRepository.findById(dto.getConcertId());
+        if (concert == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        User user= userRepository.findById(Integer.valueOf(authentication.getName()));
-        if(user==null){
+
+        User user = userRepository.findById(Integer.valueOf(authentication.getName()));
+        if (user == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-        String content=dto.getContent();
-        ConcertReview concertReview=ConcertReview.builder().concert(concert).user(user).content(content).build();
+
+        if (concert.getArtist().getUser().getId() == user.getId()) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        String content = dto.getContent();
+        ConcertReview concertReview = ConcertReview.builder()
+                .concert(concert)
+                .user(user)
+                .content(content)
+                .build();
 
         concertReviewRepository.save(concertReview);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    public ResponseEntity<HttpStatus> updateConcertReview(ConcertReviewUpdateReqDto dto, Authentication authentication) {
+        ConcertReview concertReview = concertReviewRepository.findById((dto.getReviewId())).orElse(null);
+        if (concertReview == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        concertReview.setContent(dto.getContent());
+
+        concertReviewRepository.save(concertReview);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    public ResponseEntity<HttpStatus> deleteConcertReview(Integer reviewId, Authentication authentication) {
+        ConcertReview concertReview = concertReviewRepository.findById(reviewId).orElse(null);
+        if (concertReview == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        concertReviewRepository.delete(concertReview);
+
+        return new ResponseEntity<>(HttpStatus.OK);
 
     }
 }
