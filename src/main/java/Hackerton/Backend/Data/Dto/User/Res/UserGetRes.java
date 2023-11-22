@@ -9,13 +9,13 @@ import lombok.Data;
 @Data
 public class UserGetRes {
 
-    @Schema(name = "유저 이름", description = "박종혁")
+    @Schema(description = "유저 이름", example = "박종혁")
     private String name;
 
-    @Schema(name = "유저 권한", description = "ARTIST")
+    @Schema(description = "유저 권한", example = "ARTIST")
     private RoleEnum role;
 
-    @Schema(name = "유저 관심사", description = "HIPHOP")
+    @Schema(description = "유저 관심사", example = "HIPHOP")
     private InterestEnum interest;
 
     public UserGetRes(User user){
