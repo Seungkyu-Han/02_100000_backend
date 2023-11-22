@@ -34,6 +34,9 @@ public class ConcertGetRes {
     @Schema(description = "경도", example = "38")
     private Float longitude;
 
+    @Schema(description = "콘서트 관련 사진 S3 링크", example = "{'https://avatars.githubusercontent.com/u/114932050?v=4'}")
+    private List<ConcertGetConcertPhotoRes> imgUrl;
+
     public ConcertGetRes(Concert concert, List<ConcertPhoto> concertPhotoList){
         this.concertDate = concert.getConcertDate();
         this.region = concert.getRegion().name();
@@ -44,10 +47,8 @@ public class ConcertGetRes {
         this.longitude = concert.getLongitude();
         this.imgUrl = new ArrayList<>();
         for(ConcertPhoto concertPhoto : concertPhotoList)
-            imgUrl.add(concertPhoto.getImgUrl());
+            imgUrl.add(new ConcertGetConcertPhotoRes(concertPhoto));
     }
 
-    @Schema(description = "콘서트 관련 사진 S3 링크", example = "{'https://avatars.githubusercontent.com/u/114932050?v=4'}")
-    private List<String> imgUrl;
 }
 
