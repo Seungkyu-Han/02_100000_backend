@@ -8,8 +8,8 @@ import java.util.List;
 
 
 @Repository
-public interface ConcertReviewRepository extends JpaRepository<ConcertReview,Integer> {
+public interface ConcertReviewRepository extends JpaRepository<ConcertReview,Long> {
 
-    List<ConcertReview> findAllById (Integer id);
+    List<ConcertReview> findAllById (Long id);
 
 }
