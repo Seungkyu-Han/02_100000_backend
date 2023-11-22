@@ -31,6 +31,9 @@ public class ConcertReviewServiceImpl implements ConcertReviewService {
     @Override
     public ResponseEntity<List<ConcertReviewResDto>> getConcertReview(Long concertId) {
         Concert concert = concertRepository.findById(concertId);
+        if(concert==null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
         List<ConcertReview> concertReviews = concertReviewRepository.findAllByConcert(concert);
 
         List<ConcertReviewResDto> dtos = new ArrayList<>();
@@ -45,7 +48,7 @@ public class ConcertReviewServiceImpl implements ConcertReviewService {
     public ResponseEntity<HttpStatus> createConcertReview(ConcertReviewCreateReqDto dto, Authentication authentication) {
         Concert concert = concertRepository.findById(dto.getConcertId());
         if (concert == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         User user = userRepository.findById(Integer.valueOf(authentication.getName()));
@@ -72,7 +75,7 @@ public class ConcertReviewServiceImpl implements ConcertReviewService {
     public ResponseEntity<HttpStatus> updateConcertReview(ConcertReviewUpdateReqDto dto, Authentication authentication) {
         ConcertReview concertReview = concertReviewRepository.findById((dto.getReviewId())).orElse(null);
         if (concertReview == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         concertReview.setContent(dto.getContent());
@@ -85,7 +88,7 @@ public class ConcertReviewServiceImpl implements ConcertReviewService {
     public ResponseEntity<HttpStatus> deleteConcertReview(Integer reviewId, Authentication authentication) {
         ConcertReview concertReview = concertReviewRepository.findById(reviewId).orElse(null);
         if (concertReview == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         concertReviewRepository.delete(concertReview);
