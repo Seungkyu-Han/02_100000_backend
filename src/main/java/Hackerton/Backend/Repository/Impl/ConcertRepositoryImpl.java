@@ -69,6 +69,12 @@ public class ConcertRepositoryImpl extends QuerydslRepositorySupport implements 
             preparedStatement.setInt(4, concert.getFundingPrice());
             preparedStatement.setFloat(5, concert.getLatitude());
             preparedStatement.setFloat(6, concert.getLongitude());
+
+            preparedStatement.execute();
+
+            preparedStatement.close();
+            connection.close();
+
         }catch (SQLException sqlException){
             throw new RuntimeException(sqlException);
         }

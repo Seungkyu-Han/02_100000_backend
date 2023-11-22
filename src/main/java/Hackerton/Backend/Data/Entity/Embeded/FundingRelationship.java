@@ -5,6 +5,7 @@ import Hackerton.Backend.Data.Entity.User;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.ManyToOne;
 import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
@@ -12,6 +13,7 @@ import java.util.Objects;
 
 @Embeddable
 @NoArgsConstructor
+@Data
 public class FundingRelationship implements Serializable {
     @ManyToOne
     private User user;
