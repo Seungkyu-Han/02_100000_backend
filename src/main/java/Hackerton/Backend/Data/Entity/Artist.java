@@ -17,23 +17,26 @@ public class Artist {
     @GeneratedValue(strategy= GenerationType.IDENTITY)//자동 생성 기능 추가(숫자가 자동으로 매겨짐)
     private Long id;
 
+    private String artistName;
+
     @Enumerated(EnumType.STRING)
     private GenreEnum genre;
 
     @Enumerated(EnumType.STRING)
     private RegionEnum region;
 
-    private String imgUrl;
+    private String intro;
 
     @OneToOne
     @JoinColumn
     private User user;
 
     @Builder
-    public Artist(GenreEnum genre, RegionEnum region, String imgUrl, User user){
+    public Artist(GenreEnum genre, String artistName, RegionEnum region, User user, String intro){
         this.genre = genre;
+        this.artistName = artistName;
         this.region = region;
-        this.imgUrl = imgUrl;
         this.user = user;
+        this.intro = intro;
     }
 }

@@ -20,6 +20,9 @@ public class Concert {
 
     private Date concertDate;
 
+    @ManyToOne
+    private Artist artist;
+
     @Enumerated(EnumType.STRING)
     private RegionEnum region;
     private Date fundingDate;
@@ -33,9 +36,10 @@ public class Concert {
     private Float longitude;
 
     @Builder
-    public Concert(Date fundingDate, Date concertDate, RegionEnum region, Integer fundingPrice){
+    public Concert(Date fundingDate, Date concertDate, RegionEnum region, Integer fundingPrice, Artist artist){
         this.fundingDate = fundingDate;
         this.concertDate = concertDate;
+        this.artist = artist;
         this.region = region;
         this.fundingPrice = fundingPrice;
     }

@@ -5,6 +5,7 @@ import Hackerton.Backend.Repository.UserRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -61,6 +62,7 @@ public class UserRepositoryImpl extends QuerydslRepositorySupport implements Use
     }
 
     @Override
+    @Transactional
     public void update(User user) {
         try{
             Connection connection = dataSource.getConnection();

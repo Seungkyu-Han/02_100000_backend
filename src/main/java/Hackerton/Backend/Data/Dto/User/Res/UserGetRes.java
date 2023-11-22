@@ -18,9 +18,13 @@ public class UserGetRes {
     @Schema(description = "유저 관심사", example = "HIPHOP")
     private InterestEnum interest;
 
+    @Schema(description = "유저 이미지 Url", example = "https://avatars.githubusercontent.com/u/114932050?v=4")
+    private String imgUrl;
+
     public UserGetRes(User user){
         this.name = user.getName();
         this.role = user.getRole();
         this.interest = user.getInterest();
+        this.imgUrl = user.getImgUrl();
     }
 }
