@@ -6,7 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.sql.Date;
+
 
 @Table
 @Data
@@ -24,6 +25,12 @@ public class Concert {
     private Date fundingDate;
 
     private Integer fundingPrice;
+
+    //위도
+    private Float latitude;
+
+    //경도
+    private Float longitude;
 
     @Builder
     public Concert(Date fundingDate, Date concertDate, RegionEnum region, Integer fundingPrice){
