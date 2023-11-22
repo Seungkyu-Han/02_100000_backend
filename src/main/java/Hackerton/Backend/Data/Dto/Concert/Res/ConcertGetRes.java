@@ -24,6 +24,8 @@ public class ConcertGetRes {
     @Schema(description = "펀딩 금액", example = "220000")
     private Integer fundingPrice;
 
+    private ConcertGetArtistRes artist;
+
     //위도
     @Schema(description = "위도", example = "38")
     private Float latitude;
@@ -37,6 +39,7 @@ public class ConcertGetRes {
         this.region = concert.getRegion().name();
         this.fundingDate = concert.getFundingDate();
         this.fundingPrice = concert.getFundingPrice();
+        this.artist = new ConcertGetArtistRes(concert.getArtist());
         this.latitude = concert.getLatitude();
         this.longitude = concert.getLongitude();
         this.imgUrl = new ArrayList<>();
@@ -44,6 +47,7 @@ public class ConcertGetRes {
             imgUrl.add(concertPhoto.getImgUrl());
     }
 
-    @Schema(description = "콘서트 관련 사진 S3 링크", example = "https://avatars.githubusercontent.com/u/114932050?v=4")
+    @Schema(description = "콘서트 관련 사진 S3 링크", example = "{'https://avatars.githubusercontent.com/u/114932050?v=4'}")
     private List<String> imgUrl;
 }
+

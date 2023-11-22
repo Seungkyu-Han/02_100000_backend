@@ -1,10 +1,12 @@
 package Hackerton.Backend.Repository.Impl;
 
 import Hackerton.Backend.Data.Entity.Concert;
+import Hackerton.Backend.Data.Entity.User;
 import Hackerton.Backend.Repository.ConcertRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -53,6 +55,7 @@ public class ConcertRepositoryImpl extends QuerydslRepositorySupport implements 
     }
 
     @Override
+    @Transactional
     public void update(Concert concert) {
         try{
             Connection connection = dataSource.getConnection();
@@ -75,6 +78,20 @@ public class ConcertRepositoryImpl extends QuerydslRepositorySupport implements 
     public Concert findById(Long id) {
         return jpaQueryFactory
                 .select(concert)
+                .from(concert)
+                .where(concert.id.eq(id)).fetchOne();
+    }
+
+    @Transactional
+    @Override
+    public void deleteById(Long id) {
+        jpaQueryFactory.delete(concert)
+                .where(concert.id.eq(id)).execute();
+    }
+
+    @Override
+    public Boolean checkConcertByUser(Long id, User user) {
+        return jpaQueryFactory.select(concert.artist.user.eq(user))
                 .from(concert)
                 .where(concert.id.eq(id)).fetchOne();
     }

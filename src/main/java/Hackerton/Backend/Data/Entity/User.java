@@ -28,6 +28,8 @@ public class User {
     @Enumerated(EnumType.STRING)
     private InterestEnum interest;
 
+    private String imgUrl;
+
     @Builder
     public User(Integer id, String name, String refreshToken, RoleEnum role, InterestEnum interest){
         this.id = id;

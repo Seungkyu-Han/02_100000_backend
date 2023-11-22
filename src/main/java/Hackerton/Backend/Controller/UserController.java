@@ -47,4 +47,9 @@ public class UserController {
     public ResponseEntity<UserGetRes> patchUser(@RequestBody UserPatchReq userPatchReq, @Parameter(hidden = true)Authentication authentication){
         return userService.patchUser(userPatchReq, authentication);
     }
+
+    /**
+        POST, PUT, DELETE User는 만들필요가 없을 거 같아서 밑에 이미지 추가하고 찜 목록 가져오고 그런 거 만들면 될 거 같습니다.
+     *  읽으시면 해당 주석은 지워주세요
+     */
 }
