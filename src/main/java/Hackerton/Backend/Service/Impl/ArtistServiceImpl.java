@@ -1,33 +1,100 @@
 package Hackerton.Backend.Service.Impl;
 
 import Hackerton.Backend.Data.Dto.Artist.Req.ArtistInformationReq;
+import Hackerton.Backend.Data.Dto.Artist.Req.ArtistUpdateReq;
+import Hackerton.Backend.Data.Dto.Artist.Res.ArtistInformationRes;
 import Hackerton.Backend.Data.Entity.Artist;
+import Hackerton.Backend.Data.Entity.Concert;
+import Hackerton.Backend.Data.Entity.User;
+import Hackerton.Backend.Data.Enum.GenreEnum;
+import Hackerton.Backend.Data.Enum.RegionEnum;
 import Hackerton.Backend.Repository.ArtistRepository;
+import Hackerton.Backend.Repository.Impl.ConcertRepositoryImpl;
 import Hackerton.Backend.Repository.UserRepository;
 import Hackerton.Backend.Service.ArtistService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class ArtistServiceImpl implements ArtistService {
 
-    @Autowired
     private final ArtistRepository artistRepository;
-    @Autowired
     private final UserRepository userRepository;
+    private final ConcertRepositoryImpl concertRepository;
 
     @Override
-    public Artist saveArtist(ArtistInformationReq artistinformationreq) {
-        Artist artist = artistinformationreq.toEntity();
+    public ResponseEntity<HttpStatus> saveArtist(ArtistInformationReq dto, Authentication authentication) {
 
-        if (artist.getId() != null) {
-            return null;
+        User user = userRepository.findById(Integer.valueOf(authentication.getName()));
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
+        String artistName = dto.getArtistName();
+        GenreEnum genre = dto.getGenre();
+        RegionEnum region = dto.getRegion();
+        String intro = dto.getIntro();
 
-        return artistRepository.save(artist);
+        Artist artist = Artist.builder()
+                .artistName(artistName)
+                .user(user)
+                .genre(genre)
+                .region(region)
+                .intro(intro)
+                .build();
+
+        artistRepository.save(artist);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @Override
+    public ResponseEntity<ArtistInformationRes> getArtist(Long id) {
+        Artist artist = artistRepository.findById(id).orElse(null);
+
+        if (artist == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(new ArtistInformationRes(artist), HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<HttpStatus> updateArtist(ArtistUpdateReq artistupdatereq, Long id) {
+        Artist artist = artistRepository.findById(id).orElse(null);
+
+        if (artist == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        artist.setArtistName((artistupdatereq.getArtistName()==null)?artist.getArtistName():artistupdatereq.getArtistName());
+        artist.setRegion((artistupdatereq.getRegion()==null)?artist.getRegion():artistupdatereq.getRegion());
+        artist.setGenre((artistupdatereq.getGenre()==null)?artist.getGenre():artistupdatereq.getGenre());
+        artist.setIntro((artistupdatereq.getIntro()==null)?artist.getIntro():artistupdatereq.getIntro());
+
+        artistRepository.save(artist);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<Integer> countConcert(Long id) {
+        Artist artist = artistRepository.findById(id).orElse(null);
+
+        if (artist == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        List<Concert> concert = concertRepository.findAllByArtistId(id);
+
+        return new ResponseEntity<Integer>(concert.size(),HttpStatus.OK);
+    }
+
 
 }

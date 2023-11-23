@@ -44,7 +44,7 @@ public class UserController {
             @ApiResponse(responseCode = "403", description = "권한 없음",
                     content = @Content(schema = @Schema(implementation = HttpStatus.class)))
     })
-    public ResponseEntity<UserGetRes> patchUser(@RequestBody UserPatchReq userPatchReq, @Parameter(hidden = true)Authentication authentication){
+        public ResponseEntity<UserGetRes> patchUser(@RequestBody UserPatchReq userPatchReq, @Parameter(hidden = true)Authentication authentication){
         return userService.patchUser(userPatchReq, authentication);
     }
 
