@@ -34,6 +34,10 @@ public class ChoiceServiceImpl implements ChoiceService {
     public ResponseEntity<ChoiceResArtistsDto> getArtists(Authentication authentication) {
 
         User user = userRepository.findById(Integer.valueOf(authentication.getName()));
+        if(user==null){
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
         List<Choice> choices = choiceRepository.findByIdUser(user);
 
         List<Artist> artists = new ArrayList<>();
@@ -48,7 +52,15 @@ public class ChoiceServiceImpl implements ChoiceService {
 
     public ResponseEntity<ChoiceResUsersDto> getUserNum(Authentication authentication) {
         User targetUser = userRepository.findById(Integer.valueOf(authentication.getName()));
+        if(targetUser==null){
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
         Artist artist = artistRepository.findByUser(targetUser).orElse(null);
+        if(artist==null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
         List<Choice> choices = choiceRepository.findByIdArtist(artist);
         List<User> users = new ArrayList<>();
         for (Choice choice : choices) {

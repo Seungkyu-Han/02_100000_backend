@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -59,7 +58,7 @@ public class ConcertReviewServiceImpl implements ConcertReviewService {
         if (concert.getArtist().getUser().getId() == user.getId()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-w   s
+
         String content = dto.getContent();
         ConcertReview concertReview = ConcertReview.builder()
                 .concert(concert)
