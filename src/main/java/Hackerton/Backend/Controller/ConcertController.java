@@ -90,4 +90,13 @@ public class ConcertController {
     public ResponseEntity<List<ConcertGetRes>> getRecentConcert(){
         return concertService.getRecentConcert();
     }
+
+    @GetMapping("funding")
+    @Operation(summary = "가장 펀딩이 높은 5개의 콘서트 조회 API", description = "펀딩 순서대로 6개를 가져옴")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "조회 성공", content = @Content(array = @ArraySchema(schema = @Schema(implementation = ConcertGetRes.class))))
+    })
+    public ResponseEntity<List<ConcertGetRes>> getFundingConcert(){
+        return concertService.getFundingConcert();
+    }
 }

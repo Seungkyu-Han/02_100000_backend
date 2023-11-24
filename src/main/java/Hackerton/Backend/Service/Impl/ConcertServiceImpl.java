@@ -176,4 +176,19 @@ public class ConcertServiceImpl implements ConcertService {
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
+
+    @Override
+    public ResponseEntity<List<ConcertGetRes>> getFundingConcert() {
+
+        List<Concert> fundingDescConcert = concertRepository.findConcertDescFunding();
+
+        List<ConcertGetRes> result = new ArrayList<>();
+
+        for(Concert concert : fundingDescConcert){
+            List<ConcertPhoto> concertPhotoList = concertPhotoRepository.findByConcert(concert);
+            result.add(new ConcertGetRes(concert, concertPhotoList));
+        }
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
 }

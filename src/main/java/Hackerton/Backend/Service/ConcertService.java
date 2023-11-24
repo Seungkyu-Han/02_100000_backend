@@ -19,4 +19,6 @@ public interface ConcertService {
     ResponseEntity<HttpStatus> patchConcert(ConcertPatchReq concertPatchReq, Authentication authentication);
 
     ResponseEntity<List<ConcertGetRes>> getRecentConcert();
+
+    ResponseEntity<List<ConcertGetRes>> getFundingConcert();
 }

@@ -35,4 +35,11 @@ public interface ConcertRepository extends JpaRepository<Concert, Long> {
                     "ORDER BY c.id desc "
     )
     List<Concert> findRecent6Concert();
+
+    @Query(
+            "SELECT c FROM Concert c " +
+                    "LEFT JOIN Funding f ON f.fundingRelationship.concert.id = c.id " +
+                    "GROUP BY c.id, c.fundingPrice ORDER BY (SUM(f.fundingPrice) / c.fundingPrice) desc"
+    )
+    List<Concert> findConcertDescFunding();
 }
