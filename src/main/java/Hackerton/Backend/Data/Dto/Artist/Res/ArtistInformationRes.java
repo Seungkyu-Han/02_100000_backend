@@ -1,8 +1,6 @@
 package Hackerton.Backend.Data.Dto.Artist.Res;
 
 import Hackerton.Backend.Data.Entity.Artist;
-import Hackerton.Backend.Data.Entity.ConcertReview;
-import Hackerton.Backend.Data.Entity.User;
 import Hackerton.Backend.Data.Enum.GenreEnum;
 import Hackerton.Backend.Data.Enum.RegionEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -22,7 +20,7 @@ public class ArtistInformationRes {
     private String intro;
 
     @Schema(description = "아티스트 자기소개", example = "안녕하세요")
-    private String explain;
+    private String introduction;
 
     @Schema(description = "유저 이미지 Url", example = "https://avatars.githubusercontent.com/u/114932050?v=4")
     private String imgUrl;
@@ -32,7 +30,7 @@ public class ArtistInformationRes {
         this.genre = artist.getGenre();
         this.region = artist.getRegion();
         this.intro = artist.getIntro();
-        this.explain = artist.getExplain();
+        this.introduction = artist.getIntroduction();
     }
 
     public void setImgUrl(String imgUrl) {
