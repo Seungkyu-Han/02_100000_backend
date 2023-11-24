@@ -52,8 +52,8 @@ public class ArtistController {
         return artistService.getArtist(artistId);
     }
 
-    @PatchMapping("/{artistId}")
-    @Operation(summary = "아티스트 수정 API", description = "아티스트의 정보를 수정")
+    @PatchMapping("/search")
+    @Operation(summary = "아티스트 ", description = "아티스트의 정보를 수정")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "수정 성공",
                     content = @Content(schema = @Schema(implementation = HttpStatus.class))),
@@ -75,4 +75,5 @@ public class ArtistController {
     public ResponseEntity<Integer> countConcert(@PathVariable Long artistId) {
         return artistService.countConcert(artistId);
     }
+
 }
