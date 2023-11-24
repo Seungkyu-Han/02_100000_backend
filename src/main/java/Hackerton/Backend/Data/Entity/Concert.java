@@ -30,6 +30,7 @@ public class Concert {
 
     private Integer fundingPrice;
 
+    @Enumerated(EnumType.STRING)
     private GenreEnum genre;
 
     //위도

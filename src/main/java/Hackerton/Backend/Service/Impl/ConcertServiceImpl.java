@@ -8,10 +8,7 @@ import Hackerton.Backend.Data.Entity.Concert;
 import Hackerton.Backend.Data.Entity.ConcertPhoto;
 import Hackerton.Backend.Data.Entity.User;
 import Hackerton.Backend.Data.Enum.GenreEnum;
-import Hackerton.Backend.Repository.ArtistRepository;
-import Hackerton.Backend.Repository.ConcertPhotoRepository;
-import Hackerton.Backend.Repository.ConcertRepository;
-import Hackerton.Backend.Repository.UserRepository;
+import Hackerton.Backend.Repository.*;
 import Hackerton.Backend.Service.ConcertService;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
@@ -41,6 +38,8 @@ public class ConcertServiceImpl implements ConcertService {
     private final AmazonS3Client amazonS3Client;
 
     private final ArtistRepository artistRepository;
+
+    private final FundingRepository fundingRepository;
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
@@ -54,7 +53,9 @@ public class ConcertServiceImpl implements ConcertService {
 
         List<ConcertPhoto> concertPhotoList = concertPhotoRepository.findByConcert(concert.get());
 
-        return new ResponseEntity<>(new ConcertGetRes(concert.get(), concertPhotoList), HttpStatus.OK);
+        Integer curFundingPrice = fundingRepository.getCurFundingByConcert(concert.get());
+
+        return new ResponseEntity<>(new ConcertGetRes(concert.get(), curFundingPrice, concertPhotoList), HttpStatus.OK);
     }
 
     @Override
@@ -176,7 +177,8 @@ public class ConcertServiceImpl implements ConcertService {
 
         for(Concert concert : recent6Concert){
             List<ConcertPhoto> concertPhotoList = concertPhotoRepository.findByConcert(concert);
-            result.add(new ConcertGetRes(concert, concertPhotoList));
+            Integer curFundingPrice = fundingRepository.getCurFundingByConcert(concert);
+            result.add(new ConcertGetRes(concert, curFundingPrice, concertPhotoList));
         }
 
         return new ResponseEntity<>(result, HttpStatus.OK);
@@ -191,7 +193,8 @@ public class ConcertServiceImpl implements ConcertService {
 
         for(Concert concert : fundingDescConcert){
             List<ConcertPhoto> concertPhotoList = concertPhotoRepository.findByConcert(concert);
-            result.add(new ConcertGetRes(concert, concertPhotoList));
+            Integer curFundingPrice = fundingRepository.getCurFundingByConcert(concert);
+            result.add(new ConcertGetRes(concert, curFundingPrice, concertPhotoList));
         }
 
         return new ResponseEntity<>(result, HttpStatus.OK);
@@ -205,7 +208,8 @@ public class ConcertServiceImpl implements ConcertService {
 
         for(Concert concert : fundingGenreDescConcert){
             List<ConcertPhoto> concertPhotoList = concertPhotoRepository.findByConcert(concert);
-            result.add(new ConcertGetRes(concert, concertPhotoList));
+            Integer curFundingPrice = fundingRepository.getCurFundingByConcert(concert);
+            result.add(new ConcertGetRes(concert, curFundingPrice, concertPhotoList));
         }
 
         return new ResponseEntity<>(result, HttpStatus.OK);

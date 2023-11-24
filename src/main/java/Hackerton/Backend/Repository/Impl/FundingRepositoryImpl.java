@@ -1,5 +1,6 @@
 package Hackerton.Backend.Repository.Impl;
 
+import Hackerton.Backend.Data.Entity.Concert;
 import Hackerton.Backend.Data.Entity.Embeded.FundingRelationship;
 import Hackerton.Backend.Data.Entity.Funding;
 import Hackerton.Backend.Repository.FundingRepository;
@@ -79,5 +80,11 @@ public class FundingRepositoryImpl extends QuerydslRepositorySupport implements 
         return jpaQueryFactory.select(funding)
                 .from(funding)
                 .where(funding.fundingRelationship.eq(fundingRelationship)).fetchOne();
+    }
+
+    @Override
+    public Integer getCurFundingByConcert(Concert concert) {
+        return jpaQueryFactory.select(funding.fundingPrice.sum())
+                .from(funding).where(funding.fundingRelationship.concert.eq(concert)).fetchOne();
     }
 }

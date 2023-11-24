@@ -1,6 +1,7 @@
 package Hackerton.Backend.Service.Impl;
 
 import Hackerton.Backend.Data.Dto.Choice.Req.ChoiceReqDto;
+import Hackerton.Backend.Data.Dto.Choice.Res.ChoiceGetRankRes;
 import Hackerton.Backend.Data.Dto.Choice.Res.ChoiceResArtistsDto;
 import Hackerton.Backend.Data.Dto.Choice.Res.ChoiceResUsersDto;
 import Hackerton.Backend.Data.Entity.Artist;
@@ -105,5 +106,15 @@ public class ChoiceServiceImpl implements ChoiceService {
         choiceRepository.delete(choice);
 
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<List<ChoiceGetRankRes>> getChoiceRank() {
+        List<ChoiceGetRankRes> choiceGetRankRes = new ArrayList<>();
+
+        for(Object[] artist : artistRepository.findArtistChoiceRank())
+            choiceGetRankRes.add(new ChoiceGetRankRes((String) artist[0], (Long) artist[1]));
+
+        return new ResponseEntity<>(choiceGetRankRes, HttpStatus.OK);
     }
 }

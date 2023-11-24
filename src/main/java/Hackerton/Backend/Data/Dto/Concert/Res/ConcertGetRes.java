@@ -37,10 +37,14 @@ public class ConcertGetRes {
     @Schema(description = "콘서트 관련 사진 S3 링크", example = "{'https://avatars.githubusercontent.com/u/114932050?v=4'}")
     private List<ConcertGetConcertPhotoRes> imgUrl;
 
-    public ConcertGetRes(Concert concert, List<ConcertPhoto> concertPhotoList){
+    @Schema(description = "현재 펀딩 금액")
+    private Integer curFundingPrice;
+
+    public ConcertGetRes(Concert concert, Integer curFundingPrice, List<ConcertPhoto> concertPhotoList){
         this.concertDate = concert.getConcertDate();
         this.region = concert.getRegion().name();
         this.fundingDate = concert.getFundingDate();
+        this.curFundingPrice = curFundingPrice;
         this.fundingPrice = concert.getFundingPrice();
         this.artist = new ConcertGetArtistRes(concert.getArtist());
         this.latitude = concert.getLatitude();
