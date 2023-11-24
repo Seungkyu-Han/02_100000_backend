@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class Artist {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)//자동 생성 기능 추가(숫자가 자동으로 매겨짐)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)//자동 생성 기능 추가(숫자가 자동으로 매겨짐)
     private Long id;
 
     private String artistName;
@@ -27,16 +27,19 @@ public class Artist {
 
     private String intro;
 
+    private String explain;
+
     @OneToOne
     @JoinColumn
     private User user;
 
     @Builder
-    public Artist(GenreEnum genre, String artistName, RegionEnum region, User user, String intro){
+    public Artist(GenreEnum genre, String artistName, RegionEnum region, User user, String intro, String explain) {
         this.genre = genre;
         this.artistName = artistName;
         this.region = region;
         this.user = user;
         this.intro = intro;
+        this.explain = explain;
     }
 }
