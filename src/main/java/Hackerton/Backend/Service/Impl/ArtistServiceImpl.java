@@ -10,7 +10,6 @@ import Hackerton.Backend.Data.Enum.GenreEnum;
 import Hackerton.Backend.Data.Enum.RegionEnum;
 import Hackerton.Backend.Repository.ArtistRepository;
 import Hackerton.Backend.Repository.ConcertRepository;
-import Hackerton.Backend.Repository.Impl.ConcertRepositoryImpl;
 import Hackerton.Backend.Repository.UserRepository;
 import Hackerton.Backend.Service.ArtistService;
 import lombok.RequiredArgsConstructor;
@@ -41,7 +40,7 @@ public class ArtistServiceImpl implements ArtistService {
         GenreEnum genre = dto.getGenre();
         RegionEnum region = dto.getRegion();
         String intro = dto.getIntro();
-        String explain = dto.getExplain();
+        String introduction= dto.getExplain();
 
         Artist artist = Artist.builder()
                 .artistName(artistName)
@@ -49,7 +48,7 @@ public class ArtistServiceImpl implements ArtistService {
                 .genre(genre)
                 .region(region)
                 .intro(intro)
-                .explain(explain)
+                .introduction(introduction)
                 .build();
 
         artistRepository.save(artist);
@@ -84,7 +83,7 @@ public class ArtistServiceImpl implements ArtistService {
         artist.setRegion((artistupdatereq.getRegion() == null) ? artist.getRegion() : artistupdatereq.getRegion());
         artist.setGenre((artistupdatereq.getGenre() == null) ? artist.getGenre() : artistupdatereq.getGenre());
         artist.setIntro((artistupdatereq.getIntro() == null) ? artist.getIntro() : artistupdatereq.getIntro());
-        artist.setExplain((artistupdatereq.getExplain()==null)?artist.getExplain():artistupdatereq.getExplain());
+        artist.setIntroduction((artistupdatereq.getExplain()==null)?artist.getIntroduction():artistupdatereq.getExplain());
 
         artistRepository.save(artist);
 

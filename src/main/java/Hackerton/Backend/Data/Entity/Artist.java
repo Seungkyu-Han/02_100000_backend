@@ -27,19 +27,19 @@ public class Artist {
 
     private String intro;
 
-    private String explain;
+    private String introduction;
 
     @OneToOne
     @JoinColumn
     private User user;
 
     @Builder
-    public Artist(GenreEnum genre, String artistName, RegionEnum region, User user, String intro, String explain) {
+    public Artist(GenreEnum genre, String artistName, RegionEnum region, User user, String intro, String introduction) {
         this.genre = genre;
         this.artistName = artistName;
         this.region = region;
         this.user = user;
         this.intro = intro;
-        this.explain = explain;
+        this.introduction = introduction;
     }
 }

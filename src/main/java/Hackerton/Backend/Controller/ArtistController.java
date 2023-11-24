@@ -76,7 +76,4 @@ public class ArtistController {
         return artistService.countConcert(artistId);
     }
 
-
-
-
 }
