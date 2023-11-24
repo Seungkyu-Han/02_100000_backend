@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class ConcertReview {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @ManyToOne
@@ -25,7 +25,7 @@ public class ConcertReview {
     private String content;
 
     @Builder
-    public ConcertReview(Concert concert, User user, String content){
+    public ConcertReview(Concert concert, User user, String content) {
         this.concert = concert;
         this.user = user;
         this.content = content;

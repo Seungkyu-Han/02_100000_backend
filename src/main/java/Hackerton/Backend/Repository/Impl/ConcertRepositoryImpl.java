@@ -1,6 +1,7 @@
 package Hackerton.Backend.Repository.Impl;
 
 import Hackerton.Backend.Data.Entity.Concert;
+import Hackerton.Backend.Data.Entity.ConcertPhoto;
 import Hackerton.Backend.Data.Entity.User;
 import Hackerton.Backend.Repository.ConcertRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -12,7 +13,9 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.List;
 
+import static Hackerton.Backend.Data.Entity.QArtist.artist;
 import static Hackerton.Backend.Data.Entity.QConcert.concert;
 
 @Repository
@@ -62,6 +65,7 @@ public class ConcertRepositoryImpl extends QuerydslRepositorySupport implements 
 
             PreparedStatement preparedStatement = connection.prepareStatement(
                     "UPDATE concert SET concert_date = ?, region = ?, funding_date = ?, funding_price = ?, latitude = ?, longitude = ? WHERE concert.id = ?"
+
             );
             preparedStatement.setDate(1, concert.getConcertDate());
             preparedStatement.setString(2, concert.getRegion().toString());
@@ -101,4 +105,15 @@ public class ConcertRepositoryImpl extends QuerydslRepositorySupport implements 
                 .from(concert)
                 .where(concert.id.eq(id)).fetchOne();
     }
+
+    @Override
+    public List<Concert> findAllByArtistId(Long id) {
+        return jpaQueryFactory
+                .select(concert)
+                .from(concert)
+                .join(concert.artist, artist)
+                .where(artist.id.eq(id)).fetch();
+    }
+
+
 }
