@@ -77,7 +77,7 @@ public class ConcertServiceImpl implements ConcertService {
         if(artist == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
         dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 
         Concert concert = Concert.builder()
