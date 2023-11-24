@@ -6,6 +6,7 @@ import Hackerton.Backend.Data.Dto.Concert.Res.ConcertGetRes;
 import Hackerton.Backend.Service.ConcertService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -16,6 +17,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/concert")
@@ -76,5 +79,15 @@ public class ConcertController {
             @Parameter(hidden = true) Authentication authentication
     ){
         return concertService.patchConcert(concertPatchReq, authentication);
+    }
+
+    @GetMapping("/recent")
+    @Operation(summary = "최근 콘서트 조회 API", description = "최근 콘서트 6개를 가져옴")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "조회 성공",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = ConcertGetRes.class))))
+    })
+    public ResponseEntity<List<ConcertGetRes>> getRecentConcert(){
+        return concertService.getRecentConcert();
     }
 }

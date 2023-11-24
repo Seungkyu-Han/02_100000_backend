@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -159,5 +160,20 @@ public class ConcertServiceImpl implements ConcertService {
             return null;
         }
 
+    }
+
+    @Override
+    public ResponseEntity<List<ConcertGetRes>> getRecentConcert() {
+
+        List<Concert> recent6Concert = concertRepository.findRecent6Concert();
+
+        List<ConcertGetRes> result = new ArrayList<>();
+
+        for(Concert concert : recent6Concert){
+            List<ConcertPhoto> concertPhotoList = concertPhotoRepository.findByConcert(concert);
+            result.add(new ConcertGetRes(concert, concertPhotoList));
+        }
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }

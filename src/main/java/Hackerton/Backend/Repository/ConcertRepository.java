@@ -29,4 +29,10 @@ public interface ConcertRepository extends JpaRepository<Concert, Long> {
                     "WHERE u.id = :id"
     )
     List<Concert> findAllByArtistId(Long id);
+
+    @Query(
+            "SELECT c FROM Concert c " +
+                    "ORDER BY c.id desc "
+    )
+    List<Concert> findRecent6Concert();
 }

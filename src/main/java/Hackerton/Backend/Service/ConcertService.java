@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 
+import java.util.List;
+
 public interface ConcertService {
     ResponseEntity<ConcertGetRes> getConcert(Long id);
 
@@ -15,4 +17,6 @@ public interface ConcertService {
     ResponseEntity<ConcertGetRes> postConcert(ConcertPostReq concertPostReq, Authentication authentication);
 
     ResponseEntity<HttpStatus> patchConcert(ConcertPatchReq concertPatchReq, Authentication authentication);
+
+    ResponseEntity<List<ConcertGetRes>> getRecentConcert();
 }
