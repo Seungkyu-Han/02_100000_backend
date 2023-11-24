@@ -23,11 +23,9 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.sql.Date;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -73,18 +71,21 @@ public class ConcertServiceImpl implements ConcertService {
     }
 
     @Override
-    public ResponseEntity<ConcertGetRes> postConcert(ConcertPostReq concertPostReq, Authentication authentication) {
+    public ResponseEntity<ConcertGetRes> postConcert(ConcertPostReq concertPostReq, Authentication authentication) throws ParseException {
         Artist artist = artistRepository.findByUserId(Integer.valueOf(authentication.getName()));
 
         if(artist == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX");
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+
         Concert concert = Concert.builder()
-                .concertDate(new Date(concertPostReq.getConcertDate().getTime()))
+                .concertDate(dateFormat.parse(concertPostReq.getConcertDate()))
                 .artist(artist)
                 .region(concertPostReq.getRegion())
                 .genre(concertPostReq.getGenre())
-                .fundingDate(new Date(concertPostReq.getFundingDate().getTime()))
+                .fundingDate(dateFormat.parse(concertPostReq.getFundingDate()))
                 .fundingPrice(concertPostReq.getFundingPrice())
                 .latitude(concertPostReq.getLatitude())
                 .longitude(concertPostReq.getLongitude())
@@ -96,19 +97,21 @@ public class ConcertServiceImpl implements ConcertService {
 
         concertRepository.save(concert);
 
-        for(MultipartFile multipartFile: concertPostReq.getMultipartFileList()){
-            String fileName = uploadToS3(multipartFile);
-            concertPhotoRepository.save(ConcertPhoto.builder()
-                            .concert(concert)
-                            .imgUrl(fileName)
-                            .build());
+        if(concertPostReq.getMultipartFileList() != null){
+            for(MultipartFile multipartFile: concertPostReq.getMultipartFileList()){
+                String fileName = uploadToS3(multipartFile);
+                concertPhotoRepository.save(ConcertPhoto.builder()
+                        .concert(concert)
+                        .imgUrl(fileName)
+                        .build());
+            }
         }
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @Override
-    public ResponseEntity<HttpStatus> patchConcert(ConcertPatchReq concertPatchReq, Authentication authentication) {
+    public ResponseEntity<HttpStatus> patchConcert(ConcertPatchReq concertPatchReq, Authentication authentication) throws ParseException {
         Optional<Concert> concert = concertRepository.findById(concertPatchReq.getId());
 
         if(concert.isEmpty())
@@ -124,11 +127,14 @@ public class ConcertServiceImpl implements ConcertService {
 
         concertPhotoRepository.deleteAll(concertPhotoRepository.findAllById(concertPatchReq.getDeleteFileList()));
 
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX");
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+
         if (concertPatchReq.getConcertDate() != null)
-            concert.get().setConcertDate(new Date(concertPatchReq.getConcertDate().getTime()));
+            concert.get().setConcertDate(dateFormat.parse(concertPatchReq.getConcertDate()));
 
         if (concertPatchReq.getFundingDate() != null)
-            concert.get().setFundingDate(new Date(concertPatchReq.getFundingDate().getTime()));
+            concert.get().setFundingDate(dateFormat.parse(concertPatchReq.getFundingDate()));
 
         if(concertPatchReq.getRegion() != null)
             concert.get().setRegion(concertPatchReq.getRegion());

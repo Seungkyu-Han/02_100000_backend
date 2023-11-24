@@ -6,10 +6,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Date;
 import java.util.List;
 
 @Data
@@ -17,14 +15,12 @@ import java.util.List;
 @AllArgsConstructor
 public class ConcertPostReq {
 
-    @DateTimeFormat(pattern = "YYYY-MM-dd HH:mm:ss")
-    private Date concertDate;
+    private String concertDate;
 
     @Schema(description = "지역", example = "INCHEON")
     private RegionEnum region;
 
-    @DateTimeFormat(pattern = "YYYY-MM-dd HH:mm:ss")
-    private Date fundingDate;
+    private String fundingDate;
 
     @Schema(description = "장르", example = "HIPHOP")
     private GenreEnum genre;

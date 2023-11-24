@@ -2,5 +2,9 @@ package Hackerton.Backend.Data.Enum;
 
 public enum InterestEnum {
 
-    HIPHOP
+    HIPHOP,
+    BALLAD,
+    POP,
+    DANCE,
+    ROCK
 }

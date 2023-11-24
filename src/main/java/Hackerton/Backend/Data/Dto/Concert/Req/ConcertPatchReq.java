@@ -6,10 +6,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Date;
 import java.util.List;
 
 @Data
@@ -20,8 +18,7 @@ public class ConcertPatchReq {
     @Schema(description = "수정할 콘서트의 id")
     private Long id;
 
-    @DateTimeFormat(pattern = "YYYY-MM-dd HH:mm:ss")
-    private Date concertDate;
+    private String concertDate;
 
     @Schema(description = "지역", example = "INCHEON")
     private RegionEnum region;
@@ -29,8 +26,8 @@ public class ConcertPatchReq {
     @Schema(description = "장르", example = "HIPHOP")
     private GenreEnum genre;
 
-    @DateTimeFormat(pattern = "YYYY-MM-dd HH:mm:ss")
-    private Date fundingDate;
+
+    private String fundingDate;
 
     @Schema(description = "펀딩 금액", example = "203912049321093")
     private Integer fundingPrice;

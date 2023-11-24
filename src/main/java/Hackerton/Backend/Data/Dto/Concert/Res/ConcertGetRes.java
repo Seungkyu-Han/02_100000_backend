@@ -5,7 +5,7 @@ import Hackerton.Backend.Data.Entity.ConcertPhoto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.util.List;
 
 @RestController
@@ -59,7 +60,7 @@ public class ConcertController {
     })
     public ResponseEntity<ConcertGetRes> postConcert(
             ConcertPostReq concertPostReq,
-            @Parameter(hidden = true) Authentication authentication){
+            @Parameter(hidden = true) Authentication authentication) throws ParseException {
         return concertService.postConcert(concertPostReq, authentication);
     }
 
@@ -78,7 +79,7 @@ public class ConcertController {
     public ResponseEntity<HttpStatus> patchConcert(
             ConcertPatchReq concertPatchReq,
             @Parameter(hidden = true) Authentication authentication
-    ){
+    ) throws ParseException {
         return concertService.patchConcert(concertPatchReq, authentication);
     }
 
