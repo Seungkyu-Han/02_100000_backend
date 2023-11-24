@@ -1,14 +1,15 @@
 package Hackerton.Backend.Service.Impl;
 
+import Hackerton.Backend.Data.Dto.Concert.Req.ConcertPatchReq;
 import Hackerton.Backend.Data.Dto.Concert.Req.ConcertPostReq;
 import Hackerton.Backend.Data.Dto.Concert.Res.ConcertGetRes;
 import Hackerton.Backend.Data.Entity.Artist;
 import Hackerton.Backend.Data.Entity.Concert;
 import Hackerton.Backend.Data.Entity.ConcertPhoto;
 import Hackerton.Backend.Data.Entity.User;
+import Hackerton.Backend.Repository.ArtistRepository;
 import Hackerton.Backend.Repository.ConcertPhotoRepository;
 import Hackerton.Backend.Repository.ConcertRepository;
-//import Hackerton.Backend.Repository.Impl.ArtistRepositoryImpl;
 import Hackerton.Backend.Repository.UserRepository;
 import Hackerton.Backend.Service.ConcertService;
 import com.amazonaws.services.s3.AmazonS3Client;
@@ -25,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.sql.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -36,22 +38,21 @@ public class ConcertServiceImpl implements ConcertService {
     private final ConcertPhotoRepository concertPhotoRepository;
     private final AmazonS3Client amazonS3Client;
 
-//    private final ArtistRepositoryImpl artistRepository;
+    private final ArtistRepository artistRepository;
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
-    private final String concertPhotoPath = "concertPhoto/";
 
 
     @Override
     public ResponseEntity<ConcertGetRes> getConcert(Long id) {
-        Concert concert = concertRepository.findById(id);
+        Optional<Concert> concert = concertRepository.findById(id);
 
-        if(concert == null)
+        if(concert.isEmpty())
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
-        List<ConcertPhoto> concertPhotoList = concertPhotoRepository.findByConcert(concert);
+        List<ConcertPhoto> concertPhotoList = concertPhotoRepository.findByConcert(concert.get());
 
-        return new ResponseEntity<>(new ConcertGetRes(concert, concertPhotoList), HttpStatus.OK);
+        return new ResponseEntity<>(new ConcertGetRes(concert.get(), concertPhotoList), HttpStatus.OK);
     }
 
     @Override
@@ -59,7 +60,7 @@ public class ConcertServiceImpl implements ConcertService {
 
         User user = userRepository.findById(Integer.valueOf(authentication.getName()));
 
-        if(!concertRepository.checkConcertByUser(id, user))
+        if(concertRepository.checkConcertByUser(id, user) == null)
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 
         concertRepository.deleteById(id);
@@ -69,39 +70,87 @@ public class ConcertServiceImpl implements ConcertService {
 
     @Override
     public ResponseEntity<ConcertGetRes> postConcert(ConcertPostReq concertPostReq, Authentication authentication) {
-//        Artist artist = artistRepository.findArtistByUserId(Integer.valueOf(authentication.getName()));
-//
-//        if(artist == null)
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//
-//        Concert concert = Concert.builder()
-//                .concertDate(new Date(concertPostReq.getConcertDate().getTime()))
-//                .artist(artist)
-//                .region(concertPostReq.getRegion())
-//                .fundingDate(new Date(concertPostReq.getFundingDate().getTime()))
-//                .fundingPrice(concertPostReq.getFundingPrice())
-//                .latitude(concertPostReq.getLatitude())
-//                .longitude(concertPostReq.getLongitude())
-//                .build();
+        Artist artist = artistRepository.findByUserId(Integer.valueOf(authentication.getName()));
 
-//        Long concertId = concertRepository.save(concert);
+        if(artist == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        Concert concert = Concert.builder()
+                .concertDate(new Date(concertPostReq.getConcertDate().getTime()))
+                .artist(artist)
+                .region(concertPostReq.getRegion())
+                .fundingDate(new Date(concertPostReq.getFundingDate().getTime()))
+                .fundingPrice(concertPostReq.getFundingPrice())
+                .latitude(concertPostReq.getLatitude())
+                .longitude(concertPostReq.getLongitude())
+                .build();
+
+        concertRepository.save(concert);
 
         for(MultipartFile multipartFile: concertPostReq.getMultipartFileList()){
             String fileName = uploadToS3(multipartFile);
-            if(fileName == null) {
-
-                return new ResponseEntity<>(HttpStatus.SERVICE_UNAVAILABLE);
-            }
-
+            concertPhotoRepository.save(ConcertPhoto.builder()
+                            .concert(concert)
+                            .imgUrl(fileName)
+                            .build());
         }
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    @Override
+    public ResponseEntity<HttpStatus> patchConcert(ConcertPatchReq concertPatchReq, Authentication authentication) {
+        Optional<Concert> concert = concertRepository.findById(concertPatchReq.getId());
+
+        if(concert.isEmpty())
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        Artist artist = artistRepository.findByUserId(Integer.valueOf(authentication.getName()));
+
+        if(artist == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        if(!concert.get().getArtist().equals(artist))
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+
+        concertPhotoRepository.deleteAll(concertPhotoRepository.findAllById(concertPatchReq.getDeleteFileList()));
+
+        if (concertPatchReq.getConcertDate() != null)
+            concert.get().setConcertDate(new Date(concertPatchReq.getConcertDate().getTime()));
+
+        if (concertPatchReq.getFundingDate() != null)
+            concert.get().setFundingDate(new Date(concertPatchReq.getFundingDate().getTime()));
+
+        if(concertPatchReq.getRegion() != null)
+            concert.get().setRegion(concertPatchReq.getRegion());
+
+        if(concertPatchReq.getFundingPrice() != null)
+            concert.get().setFundingPrice(concertPatchReq.getFundingPrice());
+
+        if(concertPatchReq.getLatitude() != null)
+            concert.get().setLatitude(concertPatchReq.getLatitude());
+
+        if(concertPatchReq.getLongitude() != null)
+            concert.get().setLongitude(concertPatchReq.getLongitude());
+
+        for(MultipartFile multipartFile: concertPatchReq.getMultipartFileList()){
+            String fileName = uploadToS3(multipartFile);
+            concertPhotoRepository.save(ConcertPhoto.builder()
+                    .concert(concert.get())
+                    .imgUrl(fileName)
+                    .build());
+        }
+
+        concertRepository.save(concert.get());
+
+
+        return new  ResponseEntity<>(HttpStatus.OK);
+    }
+
     private String uploadToS3(MultipartFile multipartFile){
         String uuidName = UUID.randomUUID() + "." + StringUtils.getFilenameExtension(multipartFile.getOriginalFilename());
         ObjectMetadata objectMetadata = new ObjectMetadata();
-        objectMetadata.setContentType(multipartFile.getContentType());;
+        objectMetadata.setContentType(multipartFile.getContentType());
         objectMetadata.setContentLength(multipartFile.getSize());
         try {
             amazonS3Client.putObject(bucket, uuidName, multipartFile.getInputStream(), objectMetadata);

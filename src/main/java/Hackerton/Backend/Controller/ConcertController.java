@@ -1,8 +1,8 @@
 package Hackerton.Backend.Controller;
 
+import Hackerton.Backend.Data.Dto.Concert.Req.ConcertPatchReq;
 import Hackerton.Backend.Data.Dto.Concert.Req.ConcertPostReq;
 import Hackerton.Backend.Data.Dto.Concert.Res.ConcertGetRes;
-import Hackerton.Backend.Data.Dto.User.Res.UserGetRes;
 import Hackerton.Backend.Service.ConcertService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -29,7 +29,7 @@ public class ConcertController {
     @Operation(summary = "콘서트정보 조회 API", description = "콘서트 id 사용하여 콘서트 정보를 조회")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "조회 성공",
-                    content = @Content(schema = @Schema(implementation = UserGetRes.class)))
+                    content = @Content(schema = @Schema(implementation = ConcertGetRes.class)))
     })
     public ResponseEntity<ConcertGetRes> getConcert(@PathVariable Long id){
         return concertService.getConcert(id);
@@ -57,5 +57,24 @@ public class ConcertController {
             ConcertPostReq concertPostReq,
             @Parameter(hidden = true) Authentication authentication){
         return concertService.postConcert(concertPostReq, authentication);
+    }
+
+    @PatchMapping
+    @Operation(summary = "콘서트 정보 수정 API", description = "콘서트의 정보를 수정")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "수정 성공",
+                    content = @Content(schema = @Schema(implementation = HttpStatus.class))),
+            @ApiResponse(responseCode = "400", description = "해당 콘서트가 없음",
+                    content = @Content(schema = @Schema(implementation = HttpStatus.class))),
+            @ApiResponse(responseCode = "403", description = "해당 콘서트를 개최한 사람이 아님",
+                    content = @Content(schema = @Schema(implementation = HttpStatus.class))),
+            @ApiResponse(responseCode = "404", description = "해당 아티스트가 없음",
+                    content = @Content(schema = @Schema(implementation = HttpStatus.class)))
+    })
+    public ResponseEntity<HttpStatus> patchConcert(
+            ConcertPatchReq concertPatchReq,
+            @Parameter(hidden = true) Authentication authentication
+    ){
+        return concertService.patchConcert(concertPatchReq, authentication);
     }
 }

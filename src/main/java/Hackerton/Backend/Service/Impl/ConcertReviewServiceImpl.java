@@ -18,6 +18,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -29,11 +31,11 @@ public class ConcertReviewServiceImpl implements ConcertReviewService {
 
     @Override
     public ResponseEntity<List<ConcertReviewResDto>> getConcertReview(Long concertId) {
-        Concert concert = concertRepository.findById(concertId);
-        if(concert==null){
+        Optional<Concert> concert = concertRepository.findById(concertId);
+        if(concert.isEmpty()){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        List<ConcertReview> concertReviews = concertReviewRepository.findAllByConcert(concert);
+        List<ConcertReview> concertReviews = concertReviewRepository.findAllByConcert(concert.get());
 
         List<ConcertReviewResDto> dtos = new ArrayList<>();
         for (ConcertReview review : concertReviews) {
@@ -45,8 +47,8 @@ public class ConcertReviewServiceImpl implements ConcertReviewService {
     }
 
     public ResponseEntity<HttpStatus> createConcertReview(ConcertReviewCreateReqDto dto, Authentication authentication) {
-        Concert concert = concertRepository.findById(dto.getConcertId());
-        if (concert == null) {
+        Optional<Concert> concert = concertRepository.findById(dto.getConcertId());
+        if (concert.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
@@ -55,13 +57,13 @@ public class ConcertReviewServiceImpl implements ConcertReviewService {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
-        if (concert.getArtist().getUser().getId() == user.getId()) {
+        if (Objects.equals(concert.get().getArtist().getUser().getId(), user.getId())) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         String content = dto.getContent();
         ConcertReview concertReview = ConcertReview.builder()
-                .concert(concert)
+                .concert(concert.get())
                 .user(user)
                 .content(content)
                 .build();
