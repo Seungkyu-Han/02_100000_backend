@@ -5,7 +5,7 @@ import Hackerton.Backend.Data.Entity.User;
 
 public interface ConcertRepository {
 
-    void save(Concert concert);
+    Long save(Concert concert);
 
     void update(Concert concert);
 

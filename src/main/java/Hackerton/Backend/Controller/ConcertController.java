@@ -1,5 +1,6 @@
 package Hackerton.Backend.Controller;
 
+import Hackerton.Backend.Data.Dto.Concert.Req.ConcertPostReq;
 import Hackerton.Backend.Data.Dto.Concert.Res.ConcertGetRes;
 import Hackerton.Backend.Data.Dto.User.Res.UserGetRes;
 import Hackerton.Backend.Service.ConcertService;
@@ -38,12 +39,23 @@ public class ConcertController {
     @Operation(summary = "콘서트정보 삭제 API", description = "콘서트 id 사용하여 콘서트 정보를 삭제")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "조회 성공",
-                    content = @Content(schema = @Schema(implementation = UserGetRes.class)))
+                    content = @Content(schema = @Schema(implementation = HttpStatus.class)))
     })
     public ResponseEntity<HttpStatus> deleteConcert(@PathVariable Long id, @Parameter(hidden = true) Authentication authentication){
         return concertService.deleteConcert(id, authentication);
     }
 
-
-
+    @PostMapping
+    @Operation(summary = "콘서트정보 생성 API", description = "콘서트 생성에 필요한 정보를 입력")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "생성 성공",
+                    content = @Content(schema = @Schema(implementation = HttpStatus.class))),
+            @ApiResponse(responseCode = "404", description = "아티스트가 아닙니다.",
+                    content = @Content(schema = @Schema(implementation = HttpStatus.class)))
+    })
+    public ResponseEntity<ConcertGetRes> postConcert(
+            ConcertPostReq concertPostReq,
+            @Parameter(hidden = true) Authentication authentication){
+        return concertService.postConcert(concertPostReq, authentication);
+    }
 }

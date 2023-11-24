@@ -9,9 +9,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 
 import static Hackerton.Backend.Data.Entity.QConcert.concert;
 
@@ -29,12 +27,13 @@ public class ConcertRepositoryImpl extends QuerydslRepositorySupport implements 
     }
 
     @Override
-    public void save(Concert concert) {
+    public Long save(Concert concert) {
+        long index = -1;
         try{
             Connection connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(
                     "INSERT INTO concert (concert_date, region, funding_date, funding_price, latitude, longitude) " +
-                            "VALUES (?, ?, ?, ?, ?, ?)"
+                            "VALUES (?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS
             );
 
             preparedStatement.setDate(1, concert.getConcertDate());
@@ -44,10 +43,16 @@ public class ConcertRepositoryImpl extends QuerydslRepositorySupport implements 
             preparedStatement.setFloat(5, concert.getLatitude());
             preparedStatement.setFloat(6, concert.getLongitude());
 
-            preparedStatement.execute();
+            preparedStatement.executeUpdate();
+
+            ResultSet resultSet = preparedStatement.getResultSet();
+
+            if(resultSet.next()) index = resultSet.getLong(1);
 
             preparedStatement.close();
             connection.close();
+
+            return index;
 
         }catch (SQLException sqlException){
             throw new RuntimeException(sqlException);

@@ -2,20 +2,27 @@ package Hackerton.Backend.Data.Dto.Concert.Req;
 
 import Hackerton.Backend.Data.Enum.RegionEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.sql.Date;
+import java.util.Date;
+import java.util.List;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ConcertPostReq {
 
-    @Schema(description = "버스킹 시간", example = "1999-12-04 10:00:00")
+    @DateTimeFormat(pattern = "YYYY-MM-dd HH:mm:ss")
     private Date concertDate;
 
     @Schema(description = "지역", example = "INCHEON")
     private RegionEnum region;
 
-    @Schema(description = "펀딩 마감 시간", example = "1999-11-24 10:00:00")
+    @DateTimeFormat(pattern = "YYYY-MM-dd HH:mm:ss")
     private Date fundingDate;
 
     @Schema(description = "펀딩 금액", example = "203912049321093")
@@ -26,4 +33,6 @@ public class ConcertPostReq {
 
     @Schema(description = "경도", example = "38")
     private Float longitude;
+
+    private List<MultipartFile> multipartFileList;
 }

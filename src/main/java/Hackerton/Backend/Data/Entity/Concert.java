@@ -36,12 +36,14 @@ public class Concert {
     private Float longitude;
 
     @Builder
-    public Concert(Date fundingDate, Date concertDate, RegionEnum region, Integer fundingPrice, Artist artist){
+    public Concert(Date fundingDate, Date concertDate, RegionEnum region, Integer fundingPrice, Artist artist, Float latitude, Float longitude){
         this.fundingDate = fundingDate;
         this.concertDate = concertDate;
         this.artist = artist;
         this.region = region;
         this.fundingPrice = fundingPrice;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 }
 
