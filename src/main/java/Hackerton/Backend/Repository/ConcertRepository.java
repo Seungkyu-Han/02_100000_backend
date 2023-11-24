@@ -2,6 +2,7 @@ package Hackerton.Backend.Repository;
 
 import Hackerton.Backend.Data.Entity.Concert;
 import Hackerton.Backend.Data.Entity.User;
+import Hackerton.Backend.Data.Enum.GenreEnum;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -42,4 +43,12 @@ public interface ConcertRepository extends JpaRepository<Concert, Long> {
                     "GROUP BY c.id, c.fundingPrice ORDER BY (SUM(f.fundingPrice) / c.fundingPrice) desc"
     )
     List<Concert> findConcertDescFunding();
+
+    @Query(
+            "SELECT c FROM Concert c " +
+                    "LEFT JOIN Funding f ON f.fundingRelationship.concert.id = c.id " +
+                    "WHERE c.genre = :genre " +
+                    "GROUP BY c.id, c.fundingPrice ORDER BY (SUM(f.fundingPrice) / c.fundingPrice) desc"
+    )
+    List<Concert> findConcertDescFundingByGenre(GenreEnum genre);
 }

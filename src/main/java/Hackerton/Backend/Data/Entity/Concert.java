@@ -1,5 +1,6 @@
 package Hackerton.Backend.Data.Entity;
 
+import Hackerton.Backend.Data.Enum.GenreEnum;
 import Hackerton.Backend.Data.Enum.RegionEnum;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -29,6 +30,8 @@ public class Concert {
 
     private Integer fundingPrice;
 
+    private GenreEnum genre;
+
     //위도
     private Float latitude;
 
@@ -36,10 +39,11 @@ public class Concert {
     private Float longitude;
 
     @Builder
-    public Concert(Date fundingDate, Date concertDate, RegionEnum region, Integer fundingPrice, Artist artist, Float latitude, Float longitude){
+    public Concert(Date fundingDate, Date concertDate, RegionEnum region, Integer fundingPrice, GenreEnum genre ,Artist artist, Float latitude, Float longitude){
         this.fundingDate = fundingDate;
         this.concertDate = concertDate;
         this.artist = artist;
+        this.genre = genre;
         this.region = region;
         this.fundingPrice = fundingPrice;
         this.latitude = latitude;

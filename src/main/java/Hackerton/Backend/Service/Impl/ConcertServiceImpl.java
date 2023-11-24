@@ -7,6 +7,7 @@ import Hackerton.Backend.Data.Entity.Artist;
 import Hackerton.Backend.Data.Entity.Concert;
 import Hackerton.Backend.Data.Entity.ConcertPhoto;
 import Hackerton.Backend.Data.Entity.User;
+import Hackerton.Backend.Data.Enum.GenreEnum;
 import Hackerton.Backend.Repository.ArtistRepository;
 import Hackerton.Backend.Repository.ConcertPhotoRepository;
 import Hackerton.Backend.Repository.ConcertRepository;
@@ -80,6 +81,7 @@ public class ConcertServiceImpl implements ConcertService {
                 .concertDate(new Date(concertPostReq.getConcertDate().getTime()))
                 .artist(artist)
                 .region(concertPostReq.getRegion())
+                .genre(concertPostReq.getGenre())
                 .fundingDate(new Date(concertPostReq.getFundingDate().getTime()))
                 .fundingPrice(concertPostReq.getFundingPrice())
                 .latitude(concertPostReq.getLatitude())
@@ -134,6 +136,9 @@ public class ConcertServiceImpl implements ConcertService {
         if(concertPatchReq.getLongitude() != null)
             concert.get().setLongitude(concertPatchReq.getLongitude());
 
+        if(concertPatchReq.getGenre() != null)
+            concert.get().setGenre(concertPatchReq.getGenre());
+
         for(MultipartFile multipartFile: concertPatchReq.getMultipartFileList()){
             String fileName = uploadToS3(multipartFile);
             concertPhotoRepository.save(ConcertPhoto.builder()
@@ -185,6 +190,20 @@ public class ConcertServiceImpl implements ConcertService {
         List<ConcertGetRes> result = new ArrayList<>();
 
         for(Concert concert : fundingDescConcert){
+            List<ConcertPhoto> concertPhotoList = concertPhotoRepository.findByConcert(concert);
+            result.add(new ConcertGetRes(concert, concertPhotoList));
+        }
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<List<ConcertGetRes>> getGenreConcert(GenreEnum genre) {
+        List<Concert> fundingGenreDescConcert = concertRepository.findConcertDescFundingByGenre(genre);
+
+        List<ConcertGetRes> result = new ArrayList<>();
+
+        for(Concert concert : fundingGenreDescConcert){
             List<ConcertPhoto> concertPhotoList = concertPhotoRepository.findByConcert(concert);
             result.add(new ConcertGetRes(concert, concertPhotoList));
         }

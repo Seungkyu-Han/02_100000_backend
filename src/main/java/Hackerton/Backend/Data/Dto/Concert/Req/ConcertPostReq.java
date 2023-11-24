@@ -1,5 +1,6 @@
 package Hackerton.Backend.Data.Dto.Concert.Req;
 
+import Hackerton.Backend.Data.Enum.GenreEnum;
 import Hackerton.Backend.Data.Enum.RegionEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -24,6 +25,9 @@ public class ConcertPostReq {
 
     @DateTimeFormat(pattern = "YYYY-MM-dd HH:mm:ss")
     private Date fundingDate;
+
+    @Schema(description = "장르", example = "HIPHOP")
+    private GenreEnum genre;
 
     @Schema(description = "펀딩 금액", example = "203912049321093")
     private Integer fundingPrice;

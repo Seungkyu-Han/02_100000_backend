@@ -3,6 +3,7 @@ package Hackerton.Backend.Service;
 import Hackerton.Backend.Data.Dto.Concert.Req.ConcertPatchReq;
 import Hackerton.Backend.Data.Dto.Concert.Req.ConcertPostReq;
 import Hackerton.Backend.Data.Dto.Concert.Res.ConcertGetRes;
+import Hackerton.Backend.Data.Enum.GenreEnum;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -21,4 +22,6 @@ public interface ConcertService {
     ResponseEntity<List<ConcertGetRes>> getRecentConcert();
 
     ResponseEntity<List<ConcertGetRes>> getFundingConcert();
+
+    ResponseEntity<List<ConcertGetRes>> getGenreConcert(GenreEnum genre);
 }

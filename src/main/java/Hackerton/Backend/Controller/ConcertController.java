@@ -3,6 +3,7 @@ package Hackerton.Backend.Controller;
 import Hackerton.Backend.Data.Dto.Concert.Req.ConcertPatchReq;
 import Hackerton.Backend.Data.Dto.Concert.Req.ConcertPostReq;
 import Hackerton.Backend.Data.Dto.Concert.Res.ConcertGetRes;
+import Hackerton.Backend.Data.Enum.GenreEnum;
 import Hackerton.Backend.Service.ConcertService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -91,12 +92,22 @@ public class ConcertController {
         return concertService.getRecentConcert();
     }
 
-    @GetMapping("funding")
+    @GetMapping("/funding")
     @Operation(summary = "가장 펀딩이 높은 5개의 콘서트 조회 API", description = "펀딩 순서대로 6개를 가져옴")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "조회 성공", content = @Content(array = @ArraySchema(schema = @Schema(implementation = ConcertGetRes.class))))
     })
     public ResponseEntity<List<ConcertGetRes>> getFundingConcert(){
         return concertService.getFundingConcert();
+    }
+
+    @GetMapping("/genre")
+    @Operation(summary = "장르 별로 가장 펀딩이 높은 3개의 콘서트 조회 API", description = "장르 별로 펀딩이 높은 3개 조회")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "조회 성공",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = ConcertGetRes.class))))
+    })
+    public ResponseEntity<List<ConcertGetRes>> getGenreConcert(GenreEnum genre){
+        return concertService.getGenreConcert(genre);
     }
 }
