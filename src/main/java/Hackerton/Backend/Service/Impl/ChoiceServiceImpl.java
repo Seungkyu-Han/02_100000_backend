@@ -47,7 +47,7 @@ public class ChoiceServiceImpl implements ChoiceService {
             Artist artist = choice.getChoiceRelationship().getArtist();
             artists.add(artist);
         }
-        ChoiceResArtistsDto choiceResArtistsDto = new ChoiceResArtistsDto(user, artists);
+        ChoiceResArtistsDto choiceResArtistsDto = new ChoiceResArtistsDto(user, artists, artists.size());
 
         return new ResponseEntity<>(choiceResArtistsDto, HttpStatus.OK);
     }
@@ -114,7 +114,7 @@ public class ChoiceServiceImpl implements ChoiceService {
         List<ChoiceGetRankRes> choiceGetRankRes = new ArrayList<>();
 
         for(Object[] artist : artistRepository.findArtistChoiceRank(PageRequest.of(0, 3)))
-            choiceGetRankRes.add(new ChoiceGetRankRes((String) artist[0], (Long) artist[1]));
+            choiceGetRankRes.add(new ChoiceGetRankRes((Long) artist[0], (String) artist[1], (Long) artist[2]));
 
         return new ResponseEntity<>(choiceGetRankRes, HttpStatus.OK);
     }

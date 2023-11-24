@@ -7,6 +7,8 @@ import lombok.Data;
 @AllArgsConstructor
 public class ChoiceGetRankRes {
 
+    private Long id;
+
     private String name;
 
     private Long count;

@@ -16,4 +16,6 @@ public class ChoiceResArtistsDto {
     private User user;
     @Schema(description = "찜 한 아티스트들 목록")
     private List<Artist> artists;
+
+    private Integer length;
 }
