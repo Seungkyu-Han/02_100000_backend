@@ -24,5 +24,5 @@ public class ArtistUpdateReq {
     private String intro;
 
     @Schema(description = "아티스트 자기소개", example = "안녕하세요")
-    private String explain;
+    private String introduction;
 }

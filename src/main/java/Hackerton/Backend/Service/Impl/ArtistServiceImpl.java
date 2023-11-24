@@ -40,7 +40,7 @@ public class ArtistServiceImpl implements ArtistService {
         GenreEnum genre = dto.getGenre();
         RegionEnum region = dto.getRegion();
         String intro = dto.getIntro();
-        String introduction= dto.getExplain();
+        String introduction= dto.getIntroduction();
 
         Artist artist = Artist.builder()
                 .artistName(artistName)
@@ -83,7 +83,7 @@ public class ArtistServiceImpl implements ArtistService {
         artist.setRegion((artistupdatereq.getRegion() == null) ? artist.getRegion() : artistupdatereq.getRegion());
         artist.setGenre((artistupdatereq.getGenre() == null) ? artist.getGenre() : artistupdatereq.getGenre());
         artist.setIntro((artistupdatereq.getIntro() == null) ? artist.getIntro() : artistupdatereq.getIntro());
-        artist.setIntroduction((artistupdatereq.getExplain()==null)?artist.getIntroduction():artistupdatereq.getExplain());
+        artist.setIntroduction((artistupdatereq.getIntroduction()==null)?artist.getIntroduction():artistupdatereq.getIntroduction());
 
         artistRepository.save(artist);
 
@@ -100,7 +100,7 @@ public class ArtistServiceImpl implements ArtistService {
 
         List<Concert> concert = concertRepository.findAllByArtistId(id);
 
-        return new ResponseEntity<Integer>(concert.size(), HttpStatus.OK);
+        return new ResponseEntity<>(concert.size(), HttpStatus.OK);
     }
 
 
