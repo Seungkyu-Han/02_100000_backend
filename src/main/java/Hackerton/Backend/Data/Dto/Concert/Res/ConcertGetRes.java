@@ -43,6 +43,14 @@ public class ConcertGetRes {
     @Schema(description = "현재 펀딩 금액")
     private Integer curFundingPrice;
 
+    private String intro;
+
+    private String title;
+
+    private String detail;
+
+    private String url;
+
     public ConcertGetRes(Concert concert, Integer curFundingPrice, List<ConcertPhoto> concertPhotoList){
         this.id = concert.getId();
         this.concertDate = concert.getConcertDate();
@@ -56,6 +64,10 @@ public class ConcertGetRes {
         this.imgUrl = new ArrayList<>();
         for(ConcertPhoto concertPhoto : concertPhotoList)
             imgUrl.add(new ConcertGetConcertPhotoRes(concertPhoto));
+        this.intro = concert.getIntro();
+        this.title = concert.getTitle();
+        this.detail = concert.getTitle();
+        this.url = concert.getUrl();
     }
 
 }

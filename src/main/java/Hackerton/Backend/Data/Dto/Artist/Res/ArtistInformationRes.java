@@ -4,7 +4,9 @@ import Hackerton.Backend.Data.Entity.Artist;
 import Hackerton.Backend.Data.Enum.GenreEnum;
 import Hackerton.Backend.Data.Enum.RegionEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
 
+@Data
 public class ArtistInformationRes {
 
     @Schema(description = "아티스트의 이름 ", example = "박종혁")
