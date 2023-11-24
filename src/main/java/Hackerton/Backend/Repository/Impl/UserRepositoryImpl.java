@@ -38,11 +38,11 @@ public class UserRepositoryImpl extends QuerydslRepositorySupport implements Use
 
     @Override
     public void save(User user) {
-        try{
+        try {
             Connection connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(
-                   "INSERT INTO user (id, name, refresh_token, role) values " +
-                           "(?, ?, ?, ?)"
+                    "INSERT INTO user (id, name, refresh_token, role) values " +
+                            "(?, ?, ?, ?)"
             );
 
             preparedStatement.setInt(1, user.getId());
@@ -56,7 +56,7 @@ public class UserRepositoryImpl extends QuerydslRepositorySupport implements Use
             connection.close();
 
 
-        }catch (SQLException sqlException){
+        } catch (SQLException sqlException) {
             throw new RuntimeException(sqlException);
         }
     }
@@ -64,7 +64,7 @@ public class UserRepositoryImpl extends QuerydslRepositorySupport implements Use
     @Override
     @Transactional
     public void update(User user) {
-        try{
+        try {
             Connection connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(
                     "UPDATE user SET interest = ?, name = ?, refresh_token = ?, role = ? WHERE user.id = ?"
@@ -77,10 +77,9 @@ public class UserRepositoryImpl extends QuerydslRepositorySupport implements Use
                 preparedStatement.setNull(1, Types.VARCHAR);
             }
             preparedStatement.setString(2, user.getName());
-            if(user.getRefreshToken() != null){
+            if (user.getRefreshToken() != null) {
                 preparedStatement.setString(3, user.getRefreshToken());
-            }
-            else{
+            } else {
                 preparedStatement.setNull(3, Types.VARCHAR);
             }
             preparedStatement.setString(4, user.getRole().toString());
@@ -93,7 +92,7 @@ public class UserRepositoryImpl extends QuerydslRepositorySupport implements Use
             connection.close();
 
 
-        }catch (SQLException sqlException){
+        } catch (SQLException sqlException) {
             throw new RuntimeException(sqlException);
         }
     }
