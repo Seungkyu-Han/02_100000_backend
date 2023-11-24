@@ -127,7 +127,7 @@ public class ConcertServiceImpl implements ConcertService {
 
         concertPhotoRepository.deleteAll(concertPhotoRepository.findAllById(concertPatchReq.getDeleteFileList()));
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
         dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 
         if (concertPatchReq.getConcertDate() != null)
