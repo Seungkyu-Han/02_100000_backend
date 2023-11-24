@@ -25,6 +25,9 @@ public class ArtistInformationReq {
     @Schema(description = "아티스트 유튜브 Url ", example = "https://youtu.be/Z7lyMucsaHE?si=xWb2wQr-d3NMNahv")
     private String intro;
 
+    @Schema(description = "아티스트 자기소개", example = "안녕하세요")
+    private String explain;
+
 //    @Schema(description = "아티스트 유튜브 Url ", example = "https://youtu.be/Z7lyMucsaHE?si=xWb2wQr-d3NMNahv")
 //    private String youtubeUrl;
 //

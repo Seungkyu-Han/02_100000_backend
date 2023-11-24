@@ -41,6 +41,7 @@ public class ArtistServiceImpl implements ArtistService {
         GenreEnum genre = dto.getGenre();
         RegionEnum region = dto.getRegion();
         String intro = dto.getIntro();
+        String explain = dto.getExplain();
 
         Artist artist = Artist.builder()
                 .artistName(artistName)
@@ -48,6 +49,7 @@ public class ArtistServiceImpl implements ArtistService {
                 .genre(genre)
                 .region(region)
                 .intro(intro)
+                .explain(explain)
                 .build();
 
         artistRepository.save(artist);
@@ -82,6 +84,7 @@ public class ArtistServiceImpl implements ArtistService {
         artist.setRegion((artistupdatereq.getRegion() == null) ? artist.getRegion() : artistupdatereq.getRegion());
         artist.setGenre((artistupdatereq.getGenre() == null) ? artist.getGenre() : artistupdatereq.getGenre());
         artist.setIntro((artistupdatereq.getIntro() == null) ? artist.getIntro() : artistupdatereq.getIntro());
+        artist.setExplain((artistupdatereq.getExplain()==null)?artist.getExplain():artistupdatereq.getExplain());
 
         artistRepository.save(artist);
 
