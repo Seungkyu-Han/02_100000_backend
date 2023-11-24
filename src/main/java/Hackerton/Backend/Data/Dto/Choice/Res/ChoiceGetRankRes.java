@@ -13,4 +13,6 @@ public class ChoiceGetRankRes {
 
     private Long count;
 
+    private String imgUrl;
+
 }

@@ -22,7 +22,7 @@ public interface ArtistRepository extends JpaRepository<Artist, Long> {
     Artist findByUserId(Integer userId);
 
     @Query(
-            "SELECT a.id, a.artistName, COUNT(a.id) FROM Artist a " +
+            "SELECT a.id, a.artistName, COUNT(a.id), a.user.imgUrl FROM Artist a " +
                     "LEFT JOIN Choice c ON c.choiceRelationship.artist = a " +
                     "GROUP BY a.id ORDER BY COUNT(a.id) desc"
     )

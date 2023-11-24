@@ -2,6 +2,7 @@ package Hackerton.Backend.Data.Dto.Concert.Res;
 
 import Hackerton.Backend.Data.Entity.Concert;
 import Hackerton.Backend.Data.Entity.ConcertPhoto;
+import Hackerton.Backend.Data.Enum.GenreEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -28,6 +29,8 @@ public class ConcertGetRes {
     private Integer fundingPrice;
 
     private ConcertGetArtistRes artist;
+
+    private GenreEnum genre;
 
     //위도
     @Schema(description = "위도", example = "38")
@@ -65,6 +68,7 @@ public class ConcertGetRes {
         for(ConcertPhoto concertPhoto : concertPhotoList)
             imgUrl.add(new ConcertGetConcertPhotoRes(concertPhoto));
         this.intro = concert.getIntro();
+        this.genre = concert.getGenre();
         this.title = concert.getTitle();
         this.detail = concert.getTitle();
         this.url = concert.getUrl();

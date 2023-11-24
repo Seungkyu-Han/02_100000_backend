@@ -1,6 +1,7 @@
 package Hackerton.Backend.Service.Impl;
 
 import Hackerton.Backend.Data.Dto.Choice.Req.ChoiceReqDto;
+import Hackerton.Backend.Data.Dto.Choice.Res.ChoiceArtistDto;
 import Hackerton.Backend.Data.Dto.Choice.Res.ChoiceGetRankRes;
 import Hackerton.Backend.Data.Dto.Choice.Res.ChoiceResArtistsDto;
 import Hackerton.Backend.Data.Dto.Choice.Res.ChoiceResUsersDto;
@@ -42,12 +43,14 @@ public class ChoiceServiceImpl implements ChoiceService {
 
         List<Choice> choices = choiceRepository.findByIdUser(user);
 
-        List<Artist> artists = new ArrayList<>();
+        int i = 10;
+
+        List<ChoiceArtistDto> artists = new ArrayList<>();
         for (Choice choice : choices) {
             Artist artist = choice.getChoiceRelationship().getArtist();
-            artists.add(artist);
+            artists.add(new ChoiceArtistDto(artist, i++));
         }
-        ChoiceResArtistsDto choiceResArtistsDto = new ChoiceResArtistsDto(user, artists, artists.size());
+        ChoiceResArtistsDto choiceResArtistsDto = new ChoiceResArtistsDto(user, artists);
 
         return new ResponseEntity<>(choiceResArtistsDto, HttpStatus.OK);
     }
@@ -114,7 +117,7 @@ public class ChoiceServiceImpl implements ChoiceService {
         List<ChoiceGetRankRes> choiceGetRankRes = new ArrayList<>();
 
         for(Object[] artist : artistRepository.findArtistChoiceRank(PageRequest.of(0, 3)))
-            choiceGetRankRes.add(new ChoiceGetRankRes((Long) artist[0], (String) artist[1], (Long) artist[2]));
+            choiceGetRankRes.add(new ChoiceGetRankRes((Long) artist[0], (String) artist[1], (Long) artist[2], (String) artist[3]));
 
         return new ResponseEntity<>(choiceGetRankRes, HttpStatus.OK);
     }
