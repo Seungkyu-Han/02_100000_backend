@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class ArtistReview {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @ManyToOne
@@ -25,8 +25,9 @@ public class ArtistReview {
 
     @Column(length = 1000)
     private String content;
+
     @Builder
-    public ArtistReview(Artist artist, User user, String content){
+    public ArtistReview(Artist artist, User user, String content) {
         this.artist = artist;
         this.user = user;
         this.content = content;

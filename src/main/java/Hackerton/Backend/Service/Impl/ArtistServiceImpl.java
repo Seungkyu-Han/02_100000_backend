@@ -9,6 +9,7 @@ import Hackerton.Backend.Data.Entity.User;
 import Hackerton.Backend.Data.Enum.GenreEnum;
 import Hackerton.Backend.Data.Enum.RegionEnum;
 import Hackerton.Backend.Repository.ArtistRepository;
+import Hackerton.Backend.Repository.ConcertRepository;
 import Hackerton.Backend.Repository.Impl.ConcertRepositoryImpl;
 import Hackerton.Backend.Repository.UserRepository;
 import Hackerton.Backend.Service.ArtistService;
@@ -26,7 +27,7 @@ public class ArtistServiceImpl implements ArtistService {
 
     private final ArtistRepository artistRepository;
     private final UserRepository userRepository;
-    private final ConcertRepositoryImpl concertRepository;
+    private final ConcertRepository concertRepository;
 
     @Override
     public ResponseEntity<HttpStatus> saveArtist(ArtistInformationReq dto, Authentication authentication) {
@@ -73,10 +74,10 @@ public class ArtistServiceImpl implements ArtistService {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        artist.setArtistName((artistupdatereq.getArtistName()==null)?artist.getArtistName():artistupdatereq.getArtistName());
-        artist.setRegion((artistupdatereq.getRegion()==null)?artist.getRegion():artistupdatereq.getRegion());
-        artist.setGenre((artistupdatereq.getGenre()==null)?artist.getGenre():artistupdatereq.getGenre());
-        artist.setIntro((artistupdatereq.getIntro()==null)?artist.getIntro():artistupdatereq.getIntro());
+        artist.setArtistName((artistupdatereq.getArtistName() == null) ? artist.getArtistName() : artistupdatereq.getArtistName());
+        artist.setRegion((artistupdatereq.getRegion() == null) ? artist.getRegion() : artistupdatereq.getRegion());
+        artist.setGenre((artistupdatereq.getGenre() == null) ? artist.getGenre() : artistupdatereq.getGenre());
+        artist.setIntro((artistupdatereq.getIntro() == null) ? artist.getIntro() : artistupdatereq.getIntro());
 
         artistRepository.save(artist);
 
@@ -93,7 +94,7 @@ public class ArtistServiceImpl implements ArtistService {
 
         List<Concert> concert = concertRepository.findAllByArtistId(id);
 
-        return new ResponseEntity<Integer>(concert.size(),HttpStatus.OK);
+        return new ResponseEntity<Integer>(concert.size(), HttpStatus.OK);
     }
 
 

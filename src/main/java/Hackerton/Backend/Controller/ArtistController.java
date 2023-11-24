@@ -3,10 +3,7 @@ package Hackerton.Backend.Controller;
 import Hackerton.Backend.Data.Dto.Artist.Req.ArtistInformationReq;
 import Hackerton.Backend.Data.Dto.Artist.Req.ArtistUpdateReq;
 import Hackerton.Backend.Data.Dto.Artist.Res.ArtistInformationRes;
-import Hackerton.Backend.Data.Dto.User.Req.UserPatchReq;
-import Hackerton.Backend.Data.Dto.User.Res.UserGetRes;
-import Hackerton.Backend.Data.Entity.Artist;
-import Hackerton.Backend.Repository.Impl.ConcertRepositoryImpl;
+import Hackerton.Backend.Service.ArtistService;
 import Hackerton.Backend.Service.Impl.ArtistServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -16,7 +13,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -28,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "아티스트 관련 API")
 public class ArtistController {
 
-    private ArtistServiceImpl artistservice;
+    private ArtistService artistService;
 
     @PostMapping("/create")
     @Operation(summary = "아티스트 정보 저장 API", description = "아티스트의 정보를 저장")
@@ -40,7 +36,7 @@ public class ArtistController {
     })
     public ResponseEntity<HttpStatus> saveArtist(@RequestBody ArtistInformationReq artistinformationreq, @Parameter(hidden = true) Authentication authentication) {
 
-        return artistservice.saveArtist(artistinformationreq, authentication);
+        return artistService.saveArtist(artistinformationreq, authentication);
 
     }
 
@@ -53,7 +49,7 @@ public class ArtistController {
                     content = @Content(schema = @Schema(implementation = HttpStatus.class)))
     })
     public ResponseEntity<ArtistInformationRes> getArtist(@PathVariable Long artistId) {
-        return artistservice.getArtist(artistId);
+        return artistService.getArtist(artistId);
     }
 
     @PatchMapping("/{artistId}")
@@ -65,7 +61,7 @@ public class ArtistController {
                     content = @Content(schema = @Schema(implementation = HttpStatus.class)))
     })
     public ResponseEntity<HttpStatus> updateArtist(@RequestBody ArtistUpdateReq artistUpdateReq, @PathVariable Long artistId) {
-        return artistservice.updateArtist(artistUpdateReq, artistId);
+        return artistService.updateArtist(artistUpdateReq, artistId);
     }
 
     @GetMapping("/{artistId}/count")
@@ -77,6 +73,6 @@ public class ArtistController {
                     content = @Content(schema = @Schema(implementation = HttpStatus.class)))
     })
     public ResponseEntity<Integer> countConcert(@PathVariable Long artistId) {
-        return artistservice.countConcert(artistId);
+        return artistService.countConcert(artistId);
     }
 }
