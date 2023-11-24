@@ -87,4 +87,14 @@ public class FundingRepositoryImpl extends QuerydslRepositorySupport implements 
         return jpaQueryFactory.select(funding.fundingPrice.sum())
                 .from(funding).where(funding.fundingRelationship.concert.eq(concert)).fetchOne();
     }
+
+    @Override
+    public Integer getFundingPriceByConcertIdAndUserId(Long concert_id, Integer user_id) {
+        return jpaQueryFactory.select(funding.fundingPrice)
+                .from(funding)
+                .where(
+                        funding.fundingRelationship.concert.id.eq(concert_id),
+                        funding.fundingRelationship.user.id.eq(user_id)
+                ).fetchOne();
+    }
 }

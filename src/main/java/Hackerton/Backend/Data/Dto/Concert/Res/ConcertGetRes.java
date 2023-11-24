@@ -12,6 +12,9 @@ import java.util.List;
 @Data
 public class ConcertGetRes {
 
+    @Schema(description = "콘서트 id", example = "1")
+    private Long id;
+
     @Schema(description = "콘서트 시간", example = "2023-11-11 22:00:00")
     private Date concertDate;
 
@@ -41,6 +44,7 @@ public class ConcertGetRes {
     private Integer curFundingPrice;
 
     public ConcertGetRes(Concert concert, Integer curFundingPrice, List<ConcertPhoto> concertPhotoList){
+        this.id = concert.getId();
         this.concertDate = concert.getConcertDate();
         this.region = concert.getRegion().name();
         this.fundingDate = concert.getFundingDate();

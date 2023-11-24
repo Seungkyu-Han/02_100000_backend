@@ -13,4 +13,6 @@ public interface FundingRepository {
     Funding findById(FundingRelationship fundingRelationship);
 
     Integer getCurFundingByConcert(Concert concert);
+
+    Integer getFundingPriceByConcertIdAndUserId(Long concert_id, Integer user_id);
 }
