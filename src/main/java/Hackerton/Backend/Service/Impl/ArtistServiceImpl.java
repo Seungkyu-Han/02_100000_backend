@@ -58,12 +58,16 @@ public class ArtistServiceImpl implements ArtistService {
     @Override
     public ResponseEntity<ArtistInformationRes> getArtist(Long id) {
         Artist artist = artistRepository.findById(id).orElse(null);
+        User user=artist.getUser();
 
         if (artist == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(new ArtistInformationRes(artist), HttpStatus.OK);
+        ArtistInformationRes artistInformationRes = new ArtistInformationRes(artist);
+        artistInformationRes.setImgUrl(user.getImgUrl());
+
+        return new ResponseEntity<>(artistInformationRes, HttpStatus.OK);
     }
 
     @Override

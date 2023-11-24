@@ -21,15 +21,19 @@ public class ArtistInformationRes {
     @Schema(description = "아티스트 유튜브 Url ", example = "https://youtu.be/Z7lyMucsaHE?si=xWb2wQr-d3NMNahv")
     private String intro;
 
-    @Schema(description = "아티스트 유저", example = "")
-    private User user;
+    @Schema(description = "유저 이미지 Url", example = "https://avatars.githubusercontent.com/u/114932050?v=4")
+    private String imgUrl;
 
     public ArtistInformationRes(Artist artist) {
         this.artistName = artist.getArtistName();
         this.genre = artist.getGenre();
         this.region = artist.getRegion();
         this.intro = artist.getIntro();
-        this.user = artist.getUser();
+        //this.user = artist.getUser();
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
     }
 
 }
