@@ -14,6 +14,7 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -171,7 +172,7 @@ public class ConcertServiceImpl implements ConcertService {
     @Override
     public ResponseEntity<List<ConcertGetRes>> getRecentConcert() {
 
-        List<Concert> recent6Concert = concertRepository.findRecent6Concert();
+        List<Concert> recent6Concert = concertRepository.findRecent6Concert(PageRequest.of(0, 6));
 
         List<ConcertGetRes> result = new ArrayList<>();
 
@@ -187,7 +188,7 @@ public class ConcertServiceImpl implements ConcertService {
     @Override
     public ResponseEntity<List<ConcertGetRes>> getFundingConcert() {
 
-        List<Concert> fundingDescConcert = concertRepository.findConcertDescFunding();
+        List<Concert> fundingDescConcert = concertRepository.findConcertDescFunding(PageRequest.of(0, 5));
 
         List<ConcertGetRes> result = new ArrayList<>();
 
@@ -202,7 +203,7 @@ public class ConcertServiceImpl implements ConcertService {
 
     @Override
     public ResponseEntity<List<ConcertGetRes>> getGenreConcert(GenreEnum genre) {
-        List<Concert> fundingGenreDescConcert = concertRepository.findConcertDescFundingByGenre(genre);
+        List<Concert> fundingGenreDescConcert = concertRepository.findConcertDescFundingByGenre(genre, PageRequest.of(0, 3));
 
         List<ConcertGetRes> result = new ArrayList<>();
 
