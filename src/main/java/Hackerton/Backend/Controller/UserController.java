@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+
 @RestController
 @RequestMapping("/api/user")
 @RequiredArgsConstructor
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService userService;
+
 
     @GetMapping
     @Operation(summary = "유저정보 조회 API", description = "AccessToken 사용하여 유저 정보를 조회")
@@ -48,8 +50,5 @@ public class UserController {
         return userService.patchUser(userPatchReq, authentication);
     }
 
-    /**
-        POST, PUT, DELETE User는 만들필요가 없을 거 같아서 밑에 이미지 추가하고 찜 목록 가져오고 그런 거 만들면 될 거 같습니다.
-     *  읽으시면 해당 주석은 지워주세요
-     */
+
 }
