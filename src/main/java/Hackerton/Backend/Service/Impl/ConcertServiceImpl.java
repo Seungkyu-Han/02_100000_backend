@@ -88,6 +88,10 @@ public class ConcertServiceImpl implements ConcertService {
                 .fundingPrice(concertPostReq.getFundingPrice())
                 .latitude(concertPostReq.getLatitude())
                 .longitude(concertPostReq.getLongitude())
+                .intro(concertPostReq.getIntro())
+                .title(concertPostReq.getTitle())
+                .detail(concertPostReq.getDetail())
+                .url(concertPostReq.getUrl())
                 .build();
 
         concertRepository.save(concert);
@@ -140,6 +144,18 @@ public class ConcertServiceImpl implements ConcertService {
 
         if(concertPatchReq.getGenre() != null)
             concert.get().setGenre(concertPatchReq.getGenre());
+
+        if(concertPatchReq.getIntro() != null)
+            concert.get().setIntro(concertPatchReq.getIntro());
+
+        if(concertPatchReq.getTitle() != null)
+            concert.get().setTitle(concertPatchReq.getTitle());
+
+        if(concertPatchReq.getDetail() != null)
+            concert.get().setDetail(concertPatchReq.getDetail());
+
+        if(concertPatchReq.getUrl() != null)
+            concert.get().setUrl(concertPatchReq.getUrl());
 
         for(MultipartFile multipartFile: concertPatchReq.getMultipartFileList()){
             String fileName = uploadToS3(multipartFile);

@@ -14,6 +14,7 @@ import Hackerton.Backend.Repository.UserRepository;
 import Hackerton.Backend.Service.ChoiceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -112,7 +113,7 @@ public class ChoiceServiceImpl implements ChoiceService {
     public ResponseEntity<List<ChoiceGetRankRes>> getChoiceRank() {
         List<ChoiceGetRankRes> choiceGetRankRes = new ArrayList<>();
 
-        for(Object[] artist : artistRepository.findArtistChoiceRank())
+        for(Object[] artist : artistRepository.findArtistChoiceRank(PageRequest.of(0, 3)))
             choiceGetRankRes.add(new ChoiceGetRankRes((String) artist[0], (Long) artist[1]));
 
         return new ResponseEntity<>(choiceGetRankRes, HttpStatus.OK);

@@ -2,6 +2,7 @@ package Hackerton.Backend.Repository;
 
 import Hackerton.Backend.Data.Entity.Artist;
 import Hackerton.Backend.Data.Entity.User;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -25,5 +26,5 @@ public interface ArtistRepository extends JpaRepository<Artist, Long> {
                     "LEFT JOIN Choice c ON c.choiceRelationship.artist = a " +
                     "GROUP BY a.id ORDER BY COUNT(a.id) desc"
     )
-    List<Object[]> findArtistChoiceRank();
+    List<Object[]> findArtistChoiceRank(Pageable pageable);
 }

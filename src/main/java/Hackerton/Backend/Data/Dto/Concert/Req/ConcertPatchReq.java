@@ -46,4 +46,17 @@ public class ConcertPatchReq {
 
     @Schema(description = "삭제할 파일 Id 리스트")
     private List<Integer> deleteFileList;
+
+
+    @Schema(description = "간단한 소개", example = "하이")
+    private String intro;
+
+    @Schema(description = "제목", example = "야무지다")
+    private String title;
+
+    @Schema(description = "자세한 설명", example = "야무지게 맛깔나게 해보겠습니다.")
+    private String detail;
+
+    @Schema(description = "유튜브 링크", example = "유튜브 링크")
+    private String url;
 }

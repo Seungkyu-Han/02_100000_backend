@@ -39,8 +39,16 @@ public class Concert {
     //경도
     private Float longitude;
 
+    private String intro;
+
+    private String title;
+
+    private String detail;
+
+    private String url;
+
     @Builder
-    public Concert(Date fundingDate, Date concertDate, RegionEnum region, Integer fundingPrice, GenreEnum genre ,Artist artist, Float latitude, Float longitude){
+    public Concert(Date fundingDate, Date concertDate, RegionEnum region, Integer fundingPrice, GenreEnum genre ,Artist artist, Float latitude, Float longitude, String intro, String title, String detail, String url){
         this.fundingDate = fundingDate;
         this.concertDate = concertDate;
         this.artist = artist;
@@ -49,6 +57,10 @@ public class Concert {
         this.fundingPrice = fundingPrice;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.intro = intro;
+        this.title = title;
+        this.detail = detail;
+        this.url = url;
     }
 }
 
