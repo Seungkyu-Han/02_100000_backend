@@ -28,6 +28,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private InterestEnum interest;
 
+    @Column
     private String imgUrl;
 
     @Builder
